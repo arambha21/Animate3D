@@ -16,7 +16,7 @@ noise_scheduler_kwargs:
   clip_sample:         false
 
 train_data:
-  info_path:        "./data/vdm/meta/debug.json"
+  info_path:        "./data/vdm/meta/training_info.json"
   sample_size:     256
   sample_n_frames: 16
 

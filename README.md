@@ -3,7 +3,9 @@ Yanqin Jiang<sup>1*</sup>, Chaohui Yu<sup>2*</sup>, Chenjie Cao<sup>2</sup>, Fan
 
 <sup>1</sup>CASIA, <sup>2</sup>DAMO Academy, Alibaba Group
 
-| [Project Page](https://animate3d.github.io/) | [arXiv](https://arxiv.org/abs/2407.11398) | Paper | [Video](https://www.youtube.com/watch?v=qkaeeGzLnY8) | Training Data | [Test Data](https://drive.google.com/file/d/1iFSuCAwWBVzlLCQH32yoikz8M2qBJ8rP/view?usp=sharing) |
+| [Project Page](https://animate3d.github.io/) | [arXiv](https://arxiv.org/abs/2407.11398) | Paper | [Video](https://www.youtube.com/watch?v=qkaeeGzLnY8) | 
+[Training Data](https://huggingface.co/datasets/yanqinJiang/MV-Video) | 
+[Test Data](https://drive.google.com/file/d/1iFSuCAwWBVzlLCQH32yoikz8M2qBJ8rP/view?usp=sharing) |
 
 ![Demo GIF](https://github.com/animate3d/animate3d.github.io/blob/main/assets/bg.gif)
 
@@ -23,7 +25,8 @@ Qualitative and quantitative experiments demonstrate that Animate3D significantl
 Data, code, and models will be open-released.
 
 # News
-[**2024.10.10**] Codes and pretrained models of Animate3D are released! Dataset will be released in one week. <br>
+[**2024.10.24**] Training data of Animate3D are released on [Huggingface](https://huggingface.co/datasets/yanqinJiang/MV-Video)! Please refer to dataset card page on huggingface as well as [mv-vdm.md](docs/mv-vdm.md) for detailed usage. <br>
+[**2024.10.10**] Codes and pretrained models of Animate3D are released! <br>
 [**2024.09.26**] Animate3D is accepted by [NeurIPS 2024](https://neurips.cc/)! Thanks for all! : ) <br>
 [**2024.09.10**] 😄❤️❤️ **Animate3D introduces an exciting new feature: Mesh Animation. Mesh animation requires only 15 minutes in total.** We uploaded mesh animations to our project page one month ago, and now we provide **technical details** in [updated paper](https://arxiv.org/abs/2407.11398). **Examples of animated files in FBX format can be found [here](https://drive.google.com/file/d/1RpOhNA8c8Bm-ShCInHixH6Q-AR1ZTARN/view?usp=drive_link), ready for import into standard 3D software such as Blender.** <br>
 [**2024.07.17**] The paper of Animate3D is avaliable at [arXiv](https://arxiv.org/abs/2407.11398)! We achieve impressing results, and we present high-resolution video on our project page : )

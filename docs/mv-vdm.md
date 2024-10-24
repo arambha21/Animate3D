@@ -1,4 +1,12 @@
 # Training
+Please download MV-Video dataset from [Huggingface](https://huggingface.co/datasets/yanqinJiang/MV-Video) and prepare the dataset according to its instructions. Then use the following command to genereate training json file:
+```bash
+python tools/generate_training_info.py \
+    --uid_info_dict_path /path/to/your/uid/info/dict/file/ \
+    --data_root /path/to/your/videos/folder/
+```
+Training json file will be found at `data/vdm/meta/training_info.json`.
+
 Use the following command to train:
 ```bash
 bash train.sh ${machine_num} ${gpu_per_machine} ${config_name} 
