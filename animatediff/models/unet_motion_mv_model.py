@@ -47,7 +47,7 @@ from diffusers.models.unets.unet_3d_blocks import (
 from diffusers.models.unets.unet_3d_condition import UNet3DConditionOutput
 
 from animatediff.models.unet_mv_model import MVUNet2DConditionModel
-from diffusers.models.unets.unet_motion_model import MotionModules, MotionAdapter
+from diffusers.models import MotionAdapter
 
 logger = logging.get_logger(__name__)  # pylint: disable=invalid-name
 

@@ -8,10 +8,30 @@ from torch import einsum, nn
 from diffusers.utils import USE_PEFT_BACKEND
 from diffusers.models.attention_processor import Attention
 
-import xformers
+try:
+    import xformers
+    import xformers.ops
+    XFORMERS_AVAILABLE = True
+except ImportError:
+    XFORMERS_AVAILABLE = False
 
 from einops import rearrange, repeat
 import math
+
+# Helper for memory efficient attention fallback
+def memory_efficient_attention(query, key, value, attn_bias=None, p=0.0, scale=None):
+    if XFORMERS_AVAILABLE:
+        return xformers.ops.memory_efficient_attention(query, key, value, attn_bias=attn_bias, p=p, scale=scale)
+    else:
+        # Fallback to PyTorch 2.0 native SDPA
+        # Note: scale is handled by SDPA if None (1/sqrt(dim)), but xformers expects explicit
+        # We need to broadcast attn_bias if it's 3D/4D for SDPA
+        # SDPA expects attn_mask to be additive or boolean. xformers might pass LowerTriangularMask etc.
+        # Minimal shim:
+        if scale is not None:
+            query = query * math.sqrt(scale)
+        return F.scaled_dot_product_attention(query, key, value, attn_mask=attn_bias, dropout_p=p, is_causal=False)
+
 
 from diffusers.models.embeddings import LabelEmbedding
 from diffusers.models.resnet import AlphaBlender
@@ -100,8 +120,8 @@ class MVDreamXFormersAttnProcessor:
         key = attn.head_to_batch_dim(key).contiguous()
         value = attn.head_to_batch_dim(value).contiguous()
 
-        hidden_states = xformers.ops.memory_efficient_attention(
-            query, key, value, attn_bias=attention_mask, op=self.attention_op, scale=attn.scale
+        hidden_states = memory_efficient_attention(
+            query, key, value, attn_bias=attention_mask, scale=attn.scale
         )
         hidden_states = hidden_states.to(query.dtype)
         hidden_states = attn.batch_to_head_dim(hidden_states)
@@ -230,8 +250,8 @@ class IPAdapterXFormersAttnProcessor(nn.Module):
         # hidden_states = attn.batch_to_head_dim(hidden_states)
 
         # XFormers
-        hidden_states = xformers.ops.memory_efficient_attention(
-            query, key, value, attn_bias=attention_mask, op=self.attention_op, scale=attn.scale
+        hidden_states = memory_efficient_attention(
+            query, key, value, attn_bias=attention_mask, scale=attn.scale
         )
         hidden_states = hidden_states.to(query.dtype)
         hidden_states = attn.batch_to_head_dim(hidden_states)
@@ -265,8 +285,8 @@ class IPAdapterXFormersAttnProcessor(nn.Module):
             # current_ip_hidden_states = attn.batch_to_head_dim(current_ip_hidden_states)
             
             # XFormers
-            current_ip_hidden_states = xformers.ops.memory_efficient_attention(
-                query, ip_key, ip_value, attn_bias=attention_mask, op=self.attention_op, scale=attn.scale
+            current_ip_hidden_states = memory_efficient_attention(
+                query, ip_key, ip_value, attn_bias=attention_mask, scale=attn.scale
             )
             current_ip_hidden_states = current_ip_hidden_states.to(query.dtype)
             current_ip_hidden_states = attn.batch_to_head_dim(current_ip_hidden_states)
@@ -402,8 +422,8 @@ class MVDreamI2VXFormersAttnProcessor(nn.Module):
         key = attn.head_to_batch_dim(key).contiguous()
         value = attn.head_to_batch_dim(value).contiguous()
 
-        hidden_states = xformers.ops.memory_efficient_attention(
-            query, key, value, attn_bias=attention_mask, op=self.attention_op, scale=attn.scale
+        hidden_states = memory_efficient_attention(
+            query, key, value, attn_bias=attention_mask, scale=attn.scale
         )
         hidden_states = hidden_states.to(query.dtype)
         hidden_states = attn.batch_to_head_dim(hidden_states)
@@ -413,8 +433,8 @@ class MVDreamI2VXFormersAttnProcessor(nn.Module):
         i2v_query = self.to_q_i2v(origin_hidden_states)
         i2v_query = attn.head_to_batch_dim(i2v_query).contiguous()
 
-        i2v_hidden_states = xformers.ops.memory_efficient_attention(
-            i2v_query, i2v_key, i2v_value, attn_bias=attention_mask, op=self.attention_op, scale=attn.scale
+        i2v_hidden_states = memory_efficient_attention(
+            i2v_query, i2v_key, i2v_value, attn_bias=attention_mask, scale=attn.scale
         )
         i2v_hidden_states = i2v_hidden_states.to(i2v_query.dtype)
         i2v_hidden_states = attn.batch_to_head_dim(i2v_hidden_states)
@@ -653,8 +673,8 @@ class SpatioTemporalI2VXFormersAttnProcessor(nn.Module):
             spatial_key = attn.head_to_batch_dim(spatial_key).contiguous()
             spatial_value = attn.head_to_batch_dim(spatial_value).contiguous()
 
-            spatial_hidden_states = xformers.ops.memory_efficient_attention(
-                spatial_query, spatial_key, spatial_value, attn_bias=attention_mask, op=self.attention_op, scale=attn.scale
+            spatial_hidden_states = memory_efficient_attention(
+                spatial_query, spatial_key, spatial_value, attn_bias=attention_mask, scale=attn.scale
             )
             spatial_hidden_states = spatial_hidden_states.to(spatial_query.dtype)
             spatial_hidden_states = attn.batch_to_head_dim(spatial_hidden_states)
@@ -688,8 +708,8 @@ class SpatioTemporalI2VXFormersAttnProcessor(nn.Module):
             image_key = attn.head_to_batch_dim(image_key).contiguous()
             image_value = attn.head_to_batch_dim(image_value).contiguous()
 
-            image_hidden_states = xformers.ops.memory_efficient_attention(
-                image_query, image_key, image_value, attn_bias=attention_mask, op=self.attention_op, scale=attn.scale
+            image_hidden_states = memory_efficient_attention(
+                image_query, image_key, image_value, attn_bias=attention_mask, scale=attn.scale
             )
             image_hidden_states = image_hidden_states.to(image_query.dtype)
             image_hidden_states = attn.batch_to_head_dim(image_hidden_states)
