@@ -14,7 +14,7 @@ timm
 peft
 imageio
 imageio-ffmpeg
-opencv-python
+opencv-python<4.10.0
 scikit-image
 trimesh
 xatlas
