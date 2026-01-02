@@ -1,0 +1,32 @@
+torch>=2.2.0
+torchvision>=0.17.0
+torchaudio>=2.2.0
+transformers>=4.30.0
+diffusers>=0.25.0
+accelerate>=0.25.0
+safetensors>=0.4.0
+omegaconf
+pytorch-lightning
+einops
+torch-ema
+kornia
+timm
+peft
+imageio
+imageio-ffmpeg
+opencv-python
+scikit-image
+trimesh
+xatlas
+pysdf
+PyMCubes
+tqdm
+pillow
+numpy
+scipy
+
+# Optional packages (skip if build fails in Colab):
+# git+https://github.com/NVlabs/nvdiffrast.git
+# git+https://github.com/KAIR-BAIR/nerfacc.git@v0.5.2
+# git+https://github.com/NVlabs/tiny-cuda-nn/#subdirectory=bindings/torch
+# bpy==4.0.0  # Blender Python - not available in Colab

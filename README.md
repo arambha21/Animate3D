@@ -34,6 +34,23 @@ Data, code, and models will be open-released.
 # Installation
 Please refer to [install.md](docs/install.md).
 
+## Google Colab Installation
+
+For running in Google Colab with modern packages (PyTorch 2.2+, Diffusers 0.25+):
+
+1. **Open the Notebook:**
+   - Use the provided notebook: [notebooks/Animate3D_Colab.ipynb](notebooks/Animate3D_Colab.ipynb)
+   - Or upload it to [Google Colab](https://colab.research.google.com)
+
+2. **Select GPU Runtime:**
+   - Go to `Runtime` -> `Change runtime type` -> `T4 GPU` (or A100/V100 if available)
+
+3. **Install Dependencies:**
+   - The notebook handles all installation steps automatically.
+   - It uses `requirements-colab.txt` to install compatible package versions.
+
+**Note:** Some advanced features (like `nvdiffrast` rendering) may be disabled in Colab due to build limitations, but core Multi-view Video Diffusion works out of the box.
+
 # Pretrained Models and Example Data
 Download pretrained [animate3d_motion_modules.ckpt](https://huggingface.co/yanqinJiang/animate3d/blob/main/animate3d_motion_modules.ckpt) and put it under `pretrained_models` folder. Download the [test data](https://drive.google.com/file/d/1iFSuCAwWBVzlLCQH32yoikz8M2qBJ8rP/view?usp=sharing) and unzip it. You will expect to see:
 ```

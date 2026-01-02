@@ -34,7 +34,7 @@ from diffusers.models import AutoencoderKL
 from animatediff.models.unet_mv_model import MVUNet2DConditionModel
 from animatediff.models.unet_motion_mv_model import MVUNetMotionModel
 from diffusers.models.lora import adjust_lora_scale_text_encoder
-from diffusers.models.unets.unet_motion_model import MotionAdapter
+from diffusers.models import MotionAdapter
 from diffusers.schedulers import (
     DDIMScheduler,
     DPMSolverMultistepScheduler,
