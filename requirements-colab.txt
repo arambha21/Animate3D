@@ -22,7 +22,7 @@ pysdf
 PyMCubes
 tqdm
 pillow
-numpy
+numpy<2.0
 scipy
 
 # Optional packages (skip if build fails in Colab):
